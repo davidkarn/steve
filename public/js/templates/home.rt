@@ -1,0 +1,12 @@
+<div>
+  <div class="main">
+    <h1>Say Something</h1>
+    <h2>{this.state.message}</h2>
+    <ul>
+      <li rt-repeat="item in this.state.said">
+        {item}
+      </li>
+    </ul>
+  </div> 
+</div>
+ 
