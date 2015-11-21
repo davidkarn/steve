@@ -13,7 +13,7 @@ define([
         }), React.createElement('input', { 'type': 'submit' })), React.createElement('p', {}, '\n      ', this.state.parsed, '\n    '), React.createElement.apply(this, [
             'ul',
             {},
-            _.map(this.state.said, repeatItem1.bind(this))
+            _.map(this.state.log, repeatItem1.bind(this))
         ])));
     };
 });

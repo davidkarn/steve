@@ -135,18 +135,29 @@ function command_params(command, words) {
     if (command == 'update_grade') {
         var student       = before_word(words, ['scored', 'score', 'scores']).join(" ");
         var scores        = after_word(words, ['scored', 'score', 'scores']);
-        var first_score   = parseInt(before_word(scores, ['out']).join(" "));
+        var first_score   = parseInt(before_word(scores, ['out']).join(" ").match(/[0-9]+/)[0]);
         var second_score  = parseInt(after_word(scores, ['of']).join(" "));
         return {student: closest_name(student, names),
                 score:   first_score,
                 out_of:  second_score}; }}
         
+function what_steve_did(cmd) {
+    if (cmd.command == 'start_grading')
+        return 'Grading ' + (cmd.params.for || 'now') + '.';
+    if (cmd.command == 'update_grade' && cmd.params.student && cmd.params.score)
+        return ('Gave ' + cmd.params.student + ' a score of ' + cmd.params.score.toString()
+                + ((cmd.params.out_of && ' out of '
+                   + cmd.params.out_of.toString()) || '')) + '.';
+    if (cmd.command == 'stop_grading')
+        return 'Finished grading.'; }
+        
 function extract_command(sentance) {
-    var words    = sentance.map(extractor('word')).map(runner('toLowerCase'));
-    var obj      = {sentance:   words,
-                    command:    command_name(words)};
+    var words       = sentance.map(extractor('word')).map(runner('toLowerCase'));
+    var obj         = {sentance:   words,
+                       command:    command_name(words)};
     
-    obj.params   = command_params(obj.command, words);
+    obj.params      = command_params(obj.command, words);
+    obj.steve_did   = what_steve_did(obj);
     return obj; }    
 
 function get_commands(pos) {

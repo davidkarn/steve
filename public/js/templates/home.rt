@@ -10,7 +10,7 @@
       {this.state.parsed}
     </p>
     <ul>
-      <li rt-repeat="item in this.state.said">
+      <li rt-repeat="item in this.state.log">
         {item}
       </li>
     </ul>

@@ -1,5 +1,6 @@
 define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_template) {
     'use strict';
+    var speech = new p5.Speech();
 
     function setup_annyang() {
         var me = this;
@@ -22,6 +23,15 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         annyang.debug();
         annyang.start({ autoRestart: true, continuous: false }); }
 
+    function speak(text) {
+        speech.setVoice('Google UK English Male');
+        return speech.speak(text); }
+
+    function process_part(part) {
+        if (part.steve_did) {
+            this.setState({log: this.state.log.concat([part.steve_did])});
+            speak(part.steve_did); }}
+
     function run_message(e) {
         var me = this;
         e.preventDefault();
@@ -31,7 +41,8 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
                 url: '/api/v1/parse',
                 data: {messages: [message]},
                 success: function(response) {
-                   console.log(response);
+                    console.log(response);
+                    response.map(me.process_part);
                    me.setState({parsed: JSON.stringify(response)}); },
                 error: function(x) {
                     console.log(x); }}); }
@@ -42,7 +53,8 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
     return React.createClass({
         displayName:         'home',
         go_to:                go_to,
+        process_part:         process_part,
         run_message:          run_message,
         componentWillMount:   setup_annyang,
-        getInitialState:      returner({message: '', parsed: ''}),
+        getInitialState:      returner({message: '', parsed: '', log: []}),
         render:               render}); });
