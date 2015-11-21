@@ -17,7 +17,7 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         annyang.addCallback('result', function (said) {
             me.setState({said: said}); });
         annyang.debug();
-        annyang.start(); }
+        annyang.start({ autoRestart: true, continuous: false }); }
 
     
     function render() {
