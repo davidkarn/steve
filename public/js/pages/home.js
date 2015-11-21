@@ -20,7 +20,7 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
                  print_err); 
             me.setState({said: said}); });
         annyang.debug();
-        annyang.start(); }
+        annyang.start({ autoRestart: true, continuous: false }); }
 
     function run_message(e) {
         var me = this;
