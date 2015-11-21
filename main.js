@@ -62,7 +62,40 @@ function parts_of_speech(string, next) {
 
 function process_message(msg, next) {
     console.log(msg);
-    parts_of_speech(msg, next); }
+    parts_of_speech(msg, function(pos) {
+        console.log(pos[0]);
+        next(get_commands(pos[0])); }); }
+
+function cmpi(w1, w2) {
+    return (w1 || "").toLowerCase() == (w2 || "").toLowerCase(); }
+
+function remove_ok_steve(pos) {
+    var last_was_ok = false;
+    for (var i in pos) {
+        if (cmpi(pos[i].word, "ok"))
+            last_was_ok = true;
+        else if (cmpi(pos[i].word, "steve") && last_was_ok) {
+
+            return pos.slice(parseInt(i) + 1); }
+        else
+            last_was_ok = false; }
+    return pos; }
+            
+function split_commands(pos) {
+    var commands = [[]];
+    
+    for (var i in pos) {
+        var word = pos[i];
+        if (cmpi(word.word, "then"))
+            commands = [[]].concat(commands);
+        else
+            commands[0].push(word); }
+    return commands; }
+
+function get_commands(pos) {
+    pos = remove_ok_steve(pos);
+    console.log(pos);
+    return split_commands(pos); }
 
 function do_in_sequence(fns, last) {
     function go() {
@@ -71,7 +104,7 @@ function do_in_sequence(fns, last) {
         if (!fn)
             (last || do_nothing)();
         else
-            fn.apply(fn, go); }
+            fn.apply(fn, [go]); }
     go(); }
 
 app.post('/api/v1/parse', function(req, res) {
