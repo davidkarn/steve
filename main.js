@@ -92,10 +92,71 @@ function split_commands(pos) {
             commands[0].push(word); }
     return commands; }
 
+function extractor(x) {
+    return function(y) {
+        return y[x]; }; }
+
+function runner(x) {
+    return function(y) {
+        return y[x](); }; }
+
+function member(ar, value) {
+    return ar.indexOf(value) >= 0; }
+
+function command_name(words) {
+    if (words[0] == 'start' && words[1] == 'grading')
+        return 'start_grading';
+    if (member(['stop', 'done', 'finished'], words[0]) && words[1] == 'grading')
+        return 'stop_grading';
+    if (member(['scored', 'score', 'scores'], words[1])
+        || member(['scored', 'score', 'scores'], words[2]))
+        return 'update_grade'; }
+
+function after_word(words, word_choices) {
+    for (var i in words) {
+        if (member(word_choices, words[i]))
+            return words.slice(parseInt(i) + 1); }
+    return []; }
+
+function before_word(words, word_choices) {
+    var before = [];
+    for (var i in words) {
+        if (member(word_choices, words[i]))
+            return before;
+        else
+            before.push(words[i]); }
+    return before; }
+
+
+function command_params(command, words) {
+    if (command == 'start_grading') {
+        words = after_word(words, ['for']);
+        return {for: words.join(" ")}; }
+    if (command == 'update_grade') {
+        var student       = before_word(words, ['scored', 'score', 'scores']).join(" ");
+        var scores        = after_word(words, ['scored', 'score', 'scores']);
+        var first_score   = parseInt(before_word(scores, ['out']).join(" "));
+        var second_score  = parseInt(after_word(scores, ['of']).join(" "));
+        return {student: student,
+                score:   first_score,
+                out_of:  second_score}; }}
+        
+function extract_command(sentance) {
+    console.log(sentance);
+    var words    = sentance.map(extractor('word')).map(runner('toLowerCase'));
+    console.log(words);
+    var obj      = {sentance:   words,
+                    command:    command_name(words)};
+    
+    console.log(obj);
+
+    obj.params   = command_params(obj.command, words);
+    return obj; }    
+
 function get_commands(pos) {
     pos = remove_ok_steve(pos);
     console.log(pos);
-    return split_commands(pos); }
+    return split_commands(pos).map(extract_command); }
 
 function do_in_sequence(fns, last) {
     function go() {
