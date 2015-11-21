@@ -2,6 +2,13 @@
   <div class="main">
     <h1>Say Something</h1>
     <h2>{this.state.message}</h2>
+    <form onSubmit="{this.run_message}">
+      <textarea ref="input" placeholder="or type something"></textarea>
+      <input type="submit">
+    </form>
+    <p>
+      {this.state.parsed}
+    </p>
     <ul>
       <li rt-repeat="item in this.state.said">
         {item}
