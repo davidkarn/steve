@@ -28,6 +28,7 @@
     "request": "*",
     "speakeasy-nlp": "~0.2.2",
     "natural": "~0.2.1",
-    "node-pos": "0.0.4"
+    "node-pos": "0.0.4",
+    "clj-fuzzy": "~0.3.1"
   }
 }

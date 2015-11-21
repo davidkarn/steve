@@ -2,6 +2,7 @@ var express         = require('express'),
     errorHandler    = require('errorhandler'),
     http            = require('http'),
     querystring     = require('querystring'),
+    clj             = require('clj-fuzzy'),
     request         = require('request'),
     pos             = require('node-pos');
 var bodyParser      = require('body-parser');
@@ -127,29 +128,24 @@ function before_word(words, word_choices) {
             before.push(words[i]); }
     return before; }
 
-
 function command_params(command, words) {
     if (command == 'start_grading') {
         words = after_word(words, ['for']);
-        return {for: words.join(" ")}; }
+        return {for: closest_name(words.join(" "), assignments)}; }
     if (command == 'update_grade') {
         var student       = before_word(words, ['scored', 'score', 'scores']).join(" ");
         var scores        = after_word(words, ['scored', 'score', 'scores']);
         var first_score   = parseInt(before_word(scores, ['out']).join(" "));
         var second_score  = parseInt(after_word(scores, ['of']).join(" "));
-        return {student: student,
+        return {student: closest_name(student, names),
                 score:   first_score,
                 out_of:  second_score}; }}
         
 function extract_command(sentance) {
-    console.log(sentance);
     var words    = sentance.map(extractor('word')).map(runner('toLowerCase'));
-    console.log(words);
     var obj      = {sentance:   words,
                     command:    command_name(words)};
     
-    console.log(obj);
-
     obj.params   = command_params(obj.command, words);
     return obj; }    
 
@@ -167,6 +163,32 @@ function do_in_sequence(fns, last) {
         else
             fn.apply(fn, [go]); }
     go(); }
+
+function compare_names(n1, n2) {
+    if (!n1.match(/ /))
+        n2 = n2.split(' ')[0];
+    var jaro = clj.metrics.jaro(n1, n2);
+    var jaro_metaphone = clj.metrics.jaro(
+        clj.phonetics.metaphone(n1),
+        clj.phonetics.metaphone(n2));
+    return jaro + jaro_metaphone; }
+
+var names = ['Billy Johnson', 'Freddie Mercury', 'Freddie Kruger', 'Jimmy Johns', 'Papa Smurf',
+             'Bart Simpson', 'Ralph Wiggums', 'Milhouse Vanhouten'];
+
+var assignments = ['Science', 'Pop some punk ass bloods', 'Pet a Kitten', 'Reincarnate Satan', 'History', 'Literature', 'Pop quiz'];
+
+function closest_name(name, names) {
+    if (!name) return name;
+    var highest       = false;
+    var highest_score = 0;
+    for (var i in names) {
+        var score = compare_names(name, names[i]);
+        if (score > highest_score) {
+            highest       = names[i];
+            highest_score = score; }}
+    return highest; }
+    
 
 app.post('/api/v1/parse', function(req, res) {
     var messages    = req.body.messages;
