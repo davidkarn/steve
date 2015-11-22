@@ -57,7 +57,7 @@ define([
                 textAlign: 'left',
                 margin: 'auto'
             }
-        }, this.state.grading ? React.createElement('div', {}, '\n            Grading ', this.state.grading, '\n          ') : null, this.state.course ? React.createElement('div', {}, '\n            Course ', this.state.course, '\n            ', this.state.dictating ? React.createElement('span', {}, '\n              dictating for ', this.state.dictating, '\n            ') : null, React.createElement('p', {}, '\n              ', this.state.note, '  \n            ')) : null, React.createElement.apply(this, [
+        }, this.state.grading ? React.createElement('div', {}, '\n            Grading: ', this.state.grading, '\n          ') : null, this.state.course ? React.createElement('div', {}, '\n            Course: ', this.state.course, this.state.dictating ? React.createElement('span', {}, ', \n              dictating for ', this.state.dictating, '\n            ') : null, React.createElement('p', {}, '\n              ', this.state.note, '\n            ')) : null, React.createElement.apply(this, [
             'ul',
             {
                 'style': {
