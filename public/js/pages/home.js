@@ -16,10 +16,7 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         console.log(commands);        
         annyang.addCommands(commands);
         annyang.addCallback('result', function (said) {
-            http('post', '/api/v1/parse', {messages: said},
-                 print,
-                 print_err); 
-            me.setState({said: said}); });
+            post_message(said[0]); });
         annyang.debug();
         annyang.start({ autoRestart: true, continuous: false }); }
 
@@ -30,7 +27,13 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
     function process_part(part) {
         if (part.steve_did) {
             this.setState({log: this.state.log.concat([part.steve_did])});
-            speak(part.steve_did); }}
+            speak(part.steve_did); }
+
+        if (part.command == 'start_grading') 
+            this.setState({grading: part.params.for || "."});
+        
+        if (part.command == 'stop_grading') 
+            this.setState({grading: false}); }
 
     function connect_with_canvas() {
         window.location.href = ('/auth/canvas'); }
@@ -40,6 +43,10 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         e.preventDefault();
         var message = ref_value(this.refs.input);
 
+        this.post_message(message); }
+
+    function post_message(message) {
+        var me = this;
         $.ajax({type: 'post',
                 url: '/api/v1/parse',
                 data: {messages: [message]},
@@ -57,8 +64,12 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         displayName:         'home',
         go_to:                go_to,
         process_part:         process_part,
+        post_message:         post_message,
         run_message:          run_message,
         connect_with_canvas:  connect_with_canvas,
         componentWillMount:   setup_annyang,
-        getInitialState:      returner({message: '', parsed: '', log: []}),
+        getInitialState:      returner({message:  '',
+                                        parsed:   '',
+                                        grading:  false,
+                                        log:      []}),
         render:               render}); });

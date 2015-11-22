@@ -7,7 +7,7 @@ define([
         return React.createElement('li', {}, '\n        ', item, '\n      ');
     }
     return function () {
-        return React.createElement('div', {}, React.createElement('div', { 'className': 'main' }, React.createElement('h1', {}, 'Say Something'), React.createElement('h2', {}, this.state.message), React.createElement('button', { 'onClick': this.connect_with_canvas }, 'Connect with Canvas'), React.createElement('form', { 'onSubmit': this.run_message }, React.createElement('textarea', {
+        return React.createElement('div', {}, React.createElement('div', { 'className': 'main' }, React.createElement('h1', {}, 'Say Something'), React.createElement('h2', {}, this.state.message), this.state.grading ? React.createElement('div', {}, '\n      Grading ', this.state.grading, '\n    ') : null, React.createElement('button', { 'onClick': this.connect_with_canvas }, 'Connect with Canvas'), React.createElement('form', { 'onSubmit': this.run_message }, React.createElement('textarea', {
             'ref': 'input',
             'placeholder': 'or type something'
         }), React.createElement('input', { 'type': 'submit' })), React.createElement('p', {}, '\n      ', this.state.parsed, '\n    '), React.createElement.apply(this, [
