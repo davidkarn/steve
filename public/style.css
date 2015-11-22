@@ -457,8 +457,11 @@ footer .menu{
     vertical-align: top;
   }
 
+  .mic_image {
+	  -webkit-filter: drop-shadow(12px 12px 25px rgba(0,0,0,0.2)); }
+  
   .mic_on {
-	  -webkit-filter: drop-shadow(12px 12px 25px rgba(0,0,0,0.45));
+	  -webkit-filter: drop-shadow(12px 12px 25px rgba(0,0,0,0.22));
 	  animation: mic_animation;
 	  animation-duration: 2s;
 	  animation-iteration-count: infinite;
@@ -468,7 +471,7 @@ footer .menu{
   }
 
 @keyframes mic_animation {
-	100%  { -webkit-filter: drop-shadow(12px 12px 30px rgba(0,0,0, 0.2)); }
+	100%  { -webkit-filter: drop-shadow(12px 12px 30px rgba(0,0,0, 0.6)); }
 }
 
 .logo {

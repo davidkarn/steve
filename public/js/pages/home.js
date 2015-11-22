@@ -101,28 +101,6 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         });
     }
 
-    function turn_on_mic() {
-        // for some reason we seem to get this event too many times.
-
-        if (!mic_is_on) {
-            $("#logo").fadeOut();
-            $("#logo_mic").fadeIn();
-
-            annyang.start({autoRestart: false, continuous: false});
-            mic_is_on = true;
-        }
-
-    }
-
-    function turn_off_mic() {
-        if (mic_is_on) {
-            $("#logo").fadeIn();
-            $("#logo_mic").fadeOut();
-            annyang.abort();
-            mic_is_on = false;
-        }
-    }
-
     function speak(text) {
         speech.setVoice('Google UK English Male');
         return speech.speak(text); }
@@ -197,6 +175,30 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
                 error: function(x) {
                     console.log(x); }}); }
             
+    function turn_on_mic() {
+        // for some reason we seem to get this event too many times.
+
+        if (!mic_is_on) {
+            $("#logo").fadeOut(600);
+            $("#logo_mic").fadeIn(600, function() {
+                $('.mic_image').addClass('mic_on'); });
+
+            annyang.start({autoRestart: false, continuous: false});
+            mic_is_on = true;
+        }
+
+    }
+
+    function turn_off_mic() {
+        if (mic_is_on) {
+            $("#logo").fadeIn(600);
+            $("#logo_mic").fadeOut(600, function() {
+                $('.mic_image').removeClass('mic_on'); });
+            annyang.abort();
+            mic_is_on = false;
+        }
+    }
+
     function toggle_mic() {
         if (mic_is_on) {
             turn_off_mic();
@@ -225,6 +227,8 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         getInitialState:      returner({message:     '',
                                         parsed:      '',
                                         grading:     false,
+                                        mic_image:   'images/steve-logo.png',
+                                        mic_class:   '',
                                         dictating:   false,
                                         course:      false,
                                         note:        '',

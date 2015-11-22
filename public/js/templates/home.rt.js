@@ -32,12 +32,12 @@ define([
             'style': { textAlign: 'center' }
         }, React.createElement('img', {
             'src': 'images/steve-logo.png',
-            'className': 'mic_on',
+            'className': 'mic_image',
             'id': 'logo',
             'onClick': this.toggle_mic
         }), React.createElement('img', {
             'src': 'images/steve-logo-recording-with-mic.png',
-            'className': 'mic_on',
+            'className': 'mic_image',
             'id': 'logo_mic',
             'onClick': this.toggle_mic
         })), React.createElement('span', {
