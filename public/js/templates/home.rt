@@ -24,6 +24,12 @@
           </div>
           <div rt-if="this.state.course">
             Course {this.state.course}
+            <span rt-if="this.state.dictating">
+              dictating for {this.state.dictating}
+            </span>
+            <p>
+              {this.state.note}
+            </p>
           </div>
           <ul style="font-size:1.5em;padding:0;">
             <li rt-repeat="item in this.state.log" style="list-style:none;text-indent:none;">
