@@ -210,7 +210,7 @@ function what_steve_did(cmd) {
                    + cmd.params.out_of.toString()) || '')) + '.';
     if (cmd.command == 'stop_grading')
         return 'Finished grading.';
-    if (!cmd.command && cmd.sentance[0] == 'ok' && cmd.sentance[0] == 'steve'|| started_with_ok)
+    if (!cmd.command && cmd.sentance[0] == 'ok' && (cmd.sentance[0] == 'steve'|| started_with_ok))
         return "Sorry, I don't understand that."; }
         
 function extract_command(sentance) {
@@ -253,7 +253,6 @@ function compare_names(n1, n2) {
         clj.phonetics.metaphone(n1),
         clj.phonetics.metaphone(n2));
     return jaro + jaro_metaphone; }
-
 function closest_name(name, names) {
     if (!name) return name;
     var highest       = false;
