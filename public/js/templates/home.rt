@@ -37,11 +37,6 @@
     <div class="main">
       <h1>Say Something</h1>
       <h2>{this.state.message}</h2>
-      <button onClick="{this.connect_with_canvas}">Connect with Canvas</button>
-      <form onSubmit="{this.run_message}">
-        <textarea ref="input" placeholder="or type something"></textarea>
-        <input type="submit">
-      </form>
       <p>
         {this.state.parsed}
       </p>
