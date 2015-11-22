@@ -134,14 +134,14 @@ function command_name(words) {
 
 function after_word(words, word_choices) {
     for (var i in words) {
-        if (member(word_choices, words[i]))
+        if (member_i(word_choices, words[i]))
             return words.slice(parseInt(i) + 1); }
     return []; }
 
 function before_word(words, word_choices) {
     var before = [];
     for (var i in words) {
-        if (member(word_choices, words[i]))
+        if (member_i(word_choices, words[i]))
             return before;
         else
             before.push(words[i]); }
@@ -154,12 +154,14 @@ function command_params(command, words) {
         if (!end_words[0]) end_words = after_word(words, ['enter']);
         if (!end_words[0]) end_words = after_word(words, ['open']);        
         console.log('courses', words, end_words, courses);
-        return {for: closest_name(end_words.join(" "), courses)}; }
+        return {for:   closest_name(end_words.join(" "), courses),
+                given: end_words.join(" ")}; }
     if (command == 'dictate_note') {
         end_words = after_word(words, ['for']);
         if (!end_words[0]) end_words = after_word(words, ['note']); 
         if (!end_words[0]) end_words = after_word(words, ['dictate']); 
-        return {for: closest_name(end_words.join(" "), names)}; }
+        return {for:   closest_name(end_words.join(" "), names),
+                given: end_words.join(" ")}; }
     if (command == 'start_grading') {
         var end_words = after_word(words, ['for']);
         if (!end_words[0]) end_words = after_word(words, ['grading']); 
