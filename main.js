@@ -121,6 +121,9 @@ function command_name(words) {
         return 'start_grading';
     if (cmpi(words[0], 'enter') || cmpi(words[0], 'open'))
         return 'enter_course';
+    if (cmpi(words[0], 'make')
+        && cmpi(words[words.length - 1], 'sandwich'))
+        return 'make_sandwich';
     if (cmpi(words[0], 'dictate')
         || (cmpi(words[0], 'start') && cmpi(words[0], 'dictating')))
         return 'dictate_note';
@@ -189,6 +192,10 @@ function what_steve_did(cmd) {
         if (cmd.invalid_command == 'start_grading') {
             return "I couldn't find that assignment."; }}
         
+    if (cmd.command == 'make_sandwich') {
+        var sandwiches = ['monte cristo', 'reuben', 'grilled cheese', 'sloppy joe', 'sub sandwich', "po' boy"];
+        var sandwich   = sandwiches[Math.round(Math.random() * (sandwiches.length - 1))];
+        return 'I made you a ' + sandwich; }
     if (cmd.command == 'enter_course')
         return 'Opening ' + (cmd.params.for || 'course') + '.';
     if (cmd.command == 'finished')
@@ -271,15 +278,16 @@ app.post('/api/v1/parse', function(req, res) {
     var i           = 0;
 
     function do_this() {
-        if (!messages[i]) return first;
-        process_message(messages[i], function(x) {
-            console.log('test', x, i, messages[i], x[0].command);
-            if (!x[0].command) {
-                if (!first) first = x;
-                i += 1;
-                do_this(); }
-            else
-                res.json(x); }); }
+        if (!messages[i]) res.json(first);
+        else 
+            process_message(messages[i], function(x) {
+                console.log('test', x, i, messages[i], x[0].command);
+                if (!x[0].command) {
+                    if (!first) first = x;
+                    i += 1;
+                    do_this(); }
+                else
+                    res.json(x); }); }
     do_this(); });
 
 //
