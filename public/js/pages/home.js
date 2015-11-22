@@ -9,6 +9,19 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
     function init_moodle() {
         get_courses(); }
 
+    function complete_dictation() {
+        var note = this.state.note;
+
+        call_moodle('add_note', {notes: [{
+            userid: user_id,
+            publishstate: 'course',
+            courseid: course_id,
+            text: note,
+            format: 2}]}); 
+        
+        this.add_log('Dicated: "' + note + '" for ' + this.state.dictating + ' in ' + this.state.course);
+        this.setState({note: '', dictating: false, course: false}); }
+
     function update_grade(user, assignment, grade, next) {
         call_moodle("save_grade",
                     {assignmentid:     assignment.id,
@@ -87,9 +100,12 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         speech.setVoice('Google UK English Male');
         return speech.speak(text); }
 
+    function add_log(message) {
+        this.setState({log: [message].concat(this.state.log)}); }
+    
     function process_part(part) {
         if (part.steve_did) {
-            this.setState({log: this.state.log.concat([part.steve_did])});
+            this.add_log(part.steve_did);
             speak(part.steve_did); }
 
         if (part.command == 'start_grading') 
@@ -97,6 +113,15 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
 
         if (part.command == 'enter_course') 
             this.setState({course: part.params.for || "."});
+        console.log('part', part, part.command, this.state, this.state.note);
+        if (part.command == 'finished')
+            if (this.state.dictating)
+                this.complete_dictation();
+        if (!part.command && this.state.dictating) 
+            this.setState({note: this.state.note + part.sentance.join(' ') + '. '});
+
+        if (part.command == 'dictate_note') 
+            this.setState({dictating: part.params.for || "."});
 
         if (part.command == 'update_grade')
             update_grade(lookup_student(part.params.student),
@@ -121,7 +146,7 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         $.ajax({type: 'post',
                 url: '/api/v1/parse',
                 data: {messages:    [message],
-                       dictating:    dictating,
+                       dictating:    this.state.dictating,
                        course:       this.state.course,
                        courses:      course_names(),
                        students:     student_names(),
@@ -164,12 +189,16 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         changeImage:          changeImage,
         start:                annyang.start,
         post_message:         post_message,
+        add_log:              add_log,
         run_message:          run_message,
         connect_with_canvas:  connect_with_canvas,
         componentWillMount:   setup_annyang,
-        getInitialState:      returner({message:  '',
-                                        parsed:   '',
-                                        grading:  false,
-                                        course:   false,
-                                        log:      []}),
+        complete_dictation:   complete_dictation,
+        getInitialState:      returner({message:     '',
+                                        parsed:      '',
+                                        grading:     false,
+                                        dictating:   false,
+                                        course:      false,
+                                        note:        '',
+                                        log:         []}),
         render:               render}); });

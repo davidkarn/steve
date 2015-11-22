@@ -117,7 +117,8 @@ function command_name(words) {
         return 'start_grading';
     if (cmpi(words[0], 'enter') || cmpi(words[0], 'open'))
         return 'enter_course';
-    if (cmpi(words[0], 'dictate'))
+    if (cmpi(words[0], 'dictate')
+        || (cmpi(words[0], 'start') && cmpi(words[0], 'dictating')))
         return 'dictate_note';
     if (member_i(['stop', 'done', 'finished'], words[0]) && cmpi(words[1], 'grading'))
         return 'stop_grading';
@@ -192,6 +193,8 @@ function extract_command(sentance) {
                        command:    command_name(words)};
     
     obj.params      = command_params(obj.command, words);
+    if ((obj.command == 'enter_course' || obj.command == 'start_grading') && !obj.params.for) {
+        obj.command = false; }
     obj.steve_did   = what_steve_did(obj);
     return obj; }    
 
@@ -292,6 +295,7 @@ var moodle_endpoint  = moodle_url + 'moodle/webservice/rest/server.php';
 var moodle_cmds      = {get_courses:      'core_course_get_courses',
                         get_users:        'core_enrol_get_enrolled_users',
                         save_grade:       'mod_assign_save_grade',
+                        add_note:         'core_notes_create_notes',
                         get_assignments:  'mod_assign_get_assignments'};
 
 function moodle_api(fn_name, params, next) {
