@@ -52,7 +52,8 @@ define([
                 margin: 'auto',
                 fontWeight: '300',
                 textAlign: 'center',
-                color: 'rgba(0,0,0,0.8)'
+                color: 'rgba(0,0,0,0.8)',
+                fontFamily: 'helvetica neue, helvetica, arial, sans-serif !important'
             }
         }, this.state.grading ? React.createElement('div', {}, '\n          Grading: ', this.state.grading, '\n        ') : null, this.state.course ? React.createElement('div', {}, '\n          Course: ', this.state.course, this.state.dictating ? React.createElement('span', {}, ', \n          dictating for ', this.state.dictating, '\n          ') : null, React.createElement('p', {}, '\n            ', this.state.note, '\n          ')) : null, React.createElement.apply(this, [
             'ul',
