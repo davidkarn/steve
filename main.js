@@ -76,7 +76,7 @@ function remove_ok_steve(pos) {
     for (var i in pos) {
         if (cmpi(pos[i].word, "ok"))
             last_was_ok = true;
-        else if (cmpi(pos[i].word, "steve") && last_was_ok) {
+        else if (cmpi(pos[i].word, "steve") && (i == 0 || last_was_ok)) {
             started_with_ok = true;
             return pos.slice(parseInt(i) + 1); }
         else
@@ -115,8 +115,14 @@ function member_i(ar, value) {
 function command_name(words) {
     if (cmpi(words[0], 'start') && cmpi(words[1], 'grading'))
         return 'start_grading';
+    if (cmpi(words[0], 'enter') || cmpi(words[0], 'open'))
+        return 'enter_course';
+    if (cmpi(words[0], 'dictate'))
+        return 'dictate_note';
     if (member_i(['stop', 'done', 'finished'], words[0]) && cmpi(words[1], 'grading'))
         return 'stop_grading';
+    if ((cmpi(words[0], 'finished') || cmpi(words[0], 'done')) && started_with_ok)
+        return 'finished';
     if (member_i(['scored', 'score', 'scores'], words[1])
         || member_i(['scored', 'score', 'scores'], words[2]))
         return 'update_grade'; }
@@ -137,10 +143,21 @@ function before_word(words, word_choices) {
     return before; }
 
 function command_params(command, words) {
+    var end_words;
+    if (command == 'enter_course') {
+        end_words = after_word(words, ['course']);
+        if (!end_words[0]) end_words = after_word(words, ['enter']);
+        if (!end_words[0]) end_words = after_word(words, ['open']);        
+        console.log('courses', words, end_words, courses);
+        return {for: closest_name(end_words.join(" "), courses)}; }
+    if (command == 'dictate_note') {
+        end_words = after_word(words, ['for']);
+        if (!end_words[0]) end_words = after_word(words, ['note']); 
+        if (!end_words[0]) end_words = after_word(words, ['dictate']); 
+        return {for: closest_name(end_words.join(" "), names)}; }
     if (command == 'start_grading') {
         var end_words = after_word(words, ['for']);
         if (!end_words[0]) end_words = after_word(words, ['grading']); 
-        console.log('assignments', assignments, end_words.join(" "));
         return {for: closest_name(end_words.join(" "), assignments)}; }
     if (command == 'update_grade') {
         var student       = before_word(words, ['scored', 'score', 'scores']).join(" ");
@@ -152,6 +169,12 @@ function command_params(command, words) {
                 out_of:  second_score}; }}
         
 function what_steve_did(cmd) {
+    if (cmd.command == 'enter_course')
+        return 'Opening ' + (cmd.params.for || 'course') + '.';
+    if (cmd.command == 'finished')
+        return 'Finished';
+    if (cmd.command == 'dictate_note')
+        return 'Alright, begin dictating for ' + (cmd.params.for || 'student');
     if (cmd.command == 'start_grading')
         return 'Grading ' + (cmd.params.for || 'now') + '.';
     if (cmd.command == 'update_grade' && cmd.params.student && cmd.params.score)
@@ -198,6 +221,7 @@ function compare_names(n1, n2) {
 
 var names = ['Billy Johnson', 'Freddie Mercury', 'Freddie Kruger', 'Jimmy Johns', 'Papa Smurf',
              'Bart Simpson', 'Ralph Wiggums', 'Milhouse Vanhouten'];
+var courses = [];
 
 var assignments = ['Science', 'Pop some punk ass bloods', 'Pet a Kitten', 'Reincarnate Satan', 'History', 'Literature', 'Pop quiz'];
 
@@ -217,6 +241,7 @@ app.post('/api/v1/parse', function(req, res) {
     var messages    = req.body.messages;
     var fns         = [];
     names           = req.body.students;
+    courses         = req.body.courses;
     assignments     = req.body.assignments;
 
     for (var i in messages) {

@@ -4,6 +4,7 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
     var courses        = [];
     var assignments    = [];
     var users          = [];
+    var dictating      = false;
 
     function init_moodle() {
         get_courses(); }
@@ -93,6 +94,9 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         if (part.command == 'start_grading') 
             this.setState({grading: part.params.for || "."});
 
+        if (part.command == 'enter_course') 
+            this.setState({course: part.params.for || "."});
+
         if (part.command == 'update_grade')
             update_grade(lookup_student(part.params.student),
                          lookup_assignment(this.state.grading),
@@ -116,6 +120,9 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         $.ajax({type: 'post',
                 url: '/api/v1/parse',
                 data: {messages:    [message],
+                       dictating:    dictating,
+                       course:       this.state.course,
+                       courses:      course_names(),
                        students:     student_names(),
                        assignments:  assignment_names()},
                 success: function(response) {
@@ -160,5 +167,6 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         getInitialState:      returner({message:  '',
                                         parsed:   '',
                                         grading:  false,
+                                        course:   false,
                                         log:      []}),
         render:               render}); });
