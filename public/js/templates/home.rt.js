@@ -32,20 +32,15 @@ define([
             'style': { textAlign: 'center' }
         }, React.createElement('img', {
             'src': 'images/steve-logo.png',
-            'id': 'myImage',
-            'style': {
-                display: 'inline-block',
-                width: '25%',
-                color: '#ddd',
-                height: '25%',
-                opacity: '0.7',
-                verticalAlign: 'center',
-                paddingTop: '25px',
-                fontSize: '35px'
-            },
-            'onClick': this.start,
-            'onMouseDown': this.changeImage
-        }), React.createElement('span', {
+            'className': 'mic_on',
+            'id': 'logo',
+            'onClick': this.toggle_mic
+        }), React.createElement('img', {
+            'src': 'images/steve-logo-recording-with-mic.png',
+            'className': 'mic_on',
+            'id': 'logo_mic',
+            'onClick': this.toggle_mic
+        })), React.createElement('span', {
             'className': 'title',
             'style': {
                 textIndent: '-50px',
@@ -66,6 +61,6 @@ define([
                 }
             },
             _.map(this.state.log, repeatItem1.bind(this))
-        ]))))), React.createElement('div', {}, React.createElement('div', { 'className': 'main' }, React.createElement('h1', {}, 'Say Something'), React.createElement('h2', {}, this.state.message), React.createElement('p', {}, '\n        ', this.state.parsed, '\n      '))));
+        ])))), React.createElement('div', {}, React.createElement('div', { 'className': 'main' }, React.createElement('h1', {}, 'Say Something'), React.createElement('h2', {}, this.state.message), React.createElement('p', {}, '\n        ', this.state.parsed, '\n      '))));
     };
 });

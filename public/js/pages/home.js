@@ -5,6 +5,7 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
     var assignments    = [];
     var users          = [];
     var dictating      = false;
+    var mic_is_on      = false;
 
     function init_moodle() {
         get_courses(); }
@@ -88,13 +89,38 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
                 me.setState({message: "Sup dog."}); },
             'test': function() {
                 console.log('hello', arguments);
-                me.setState({message: "Sup dog."}); }}; 
+                me.setState({message: "Sup dog."}); }};
         console.log(commands);
         annyang.debug();
         annyang.addCommands(commands);
         annyang.addCallback('result', function (said) {
             me.post_message(said[0]); });
-        annyang.start({ autoRestart: false }); }
+        annyang.addCallback('end', function() {
+            turn_off_mic();
+        });
+    }
+
+    function turn_on_mic() {
+        // for some reason we seem to get this event too many times.
+
+        if (!mic_is_on) {
+            $("#logo").fadeOut();
+            $("#logo_mic").fadeIn();
+
+            annyang.start({autoRestart: false, continuous: false});
+            mic_is_on = true;
+        }
+
+    }
+
+    function turn_off_mic() {
+        if (mic_is_on) {
+            $("#logo").fadeIn();
+            $("#logo_mic").fadeOut();
+            annyang.abort();
+            mic_is_on = false;
+        }
+    }
 
     function speak(text) {
         speech.setVoice('Google UK English Male');
@@ -170,12 +196,13 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
                 error: function(x) {
                     console.log(x); }}); }
             
-    function changeImage() {
-        var image = document.getElementById('myImage');
-        if (image.src.match("images/steve-logo.png"))
-            image.src = "images/steve-logo-recording-with-mic.png";
-        else 
-            image.src = "images/steve-logo.png"; }
+    function toggle_mic() {
+        if (mic_is_on) {
+            turn_off_mic();
+        } else {
+            turn_on_mic();
+        }
+    }
 
     function render() {
         return home_template.apply(this, arguments); }
@@ -186,7 +213,7 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         displayName:         'home',
         go_to:                go_to,
         process_part:         process_part,
-        changeImage:          changeImage,
+        toggle_mic:           toggle_mic,
         start:                annyang.start,
         post_message:         post_message,
         add_log:              add_log,

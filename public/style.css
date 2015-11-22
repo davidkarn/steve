@@ -456,7 +456,44 @@ footer .menu{
     text-align: left;
     vertical-align: top;
   }
-  #headline {
+
+  .mic_on {
+	  -webkit-filter: drop-shadow(12px 12px 25px rgba(0,0,0,1.0));
+	  animation: mic_animation;
+	  animation-duration: 2s;
+	  animation-iteration-count: infinite;
+	  animation-timing-function: ease-in-out;
+	  animation-direction: alternate;
+	  position: relative;
+  }
+
+@keyframes mic_animation {
+	100%  { -webkit-filter: drop-shadow(12px 12px 30px rgba(0,0,0, 1.0)); }
+}
+
+.logo {
+	position: relative;
+	width: 500px;
+	height: 500px;
+	margin: 0 auto;
+}
+
+.logo img {
+	position: absolute;
+	left: 0;
+	display:inline-block;
+	color:#ddd;
+	opacity:0.7;
+	vertical-align:central;
+	padding-top:25px;
+	font-size:35px;"
+}
+
+#logo_mic {
+	display: none;
+}
+
+#headline {
     font-size: 40px;
     font-weight: 300;
   }

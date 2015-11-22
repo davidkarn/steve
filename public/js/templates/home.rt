@@ -14,7 +14,9 @@
       <br /><br />
       <div class="logo" style="text-align:center;">
     		
-    	<img src="images/steve-logo.png" id="myImage" style="display:inline-block;width:25%;color:#ddd;height:25%;opacity:0.7;vertical-align:center;padding-top:25px;font-size:35px;" onClick="{this.start}" onMouseDown="{this.changeImage}"></img>
+    	<img src="images/steve-logo.png" class="mic_on" id="logo" onClick="{this.toggle_mic}">
+        <img src="images/steve-logo-recording-with-mic.png" class="mic_on" id="logo_mic" onClick="{this.toggle_mic}">
+        </div>
           
 	<span class="title" style="text-indent:-50px; margin-top:20px;"><span>“ok </span>steve”</span>
         <br /><br />
@@ -36,10 +38,9 @@
               {item}
             </li>
           </ul>
-        </div>
 
-    		
-      </div>   
+
+      </div>
     </header>
   </div>
   <div>
