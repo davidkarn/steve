@@ -590,3 +590,6 @@ footer .menu{
             .wrap {
                 width: auto;
                 padding: 0; }}
+
+                .dropdown {
+                    display: none !important; }

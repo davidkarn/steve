@@ -211,8 +211,7 @@ function what_steve_did(cmd) {
                    + cmd.params.out_of.toString()) || '')) + '.';
     if (cmd.command == 'stop_grading')
         return 'Finished grading.';
-    if (!cmd.command && cmd.sentance[0] == 'ok' && (cmd.sentance[0] == 'steve'|| started_with_ok))
-        return "Sorry, I don't understand that."; }
+    return "Sorry, I don't understand that."; }
         
 function extract_command(sentance) {
     var words       = sentance.map(extractor('word')).map(runner('toLowerCase'));
