@@ -9,7 +9,7 @@ define([
                 listStyle: 'none',
                 textIndent: 'none'
             }
-        }, '\n              ', item, '\n            ');
+        }, '\n            ', item, '\n          ');
     }
     return function () {
         return React.createElement('div', {}, React.createElement('div', { 'className': 'wrap' }, React.createElement('header', {}, React.createElement('div', {
@@ -32,20 +32,15 @@ define([
             'style': { textAlign: 'center' }
         }, React.createElement('img', {
             'src': 'images/steve-logo.png',
-            'id': 'myImage',
-            'style': {
-                display: 'inline-block',
-                width: '25%',
-                color: '#ddd',
-                height: '25%',
-                opacity: '0.7',
-                verticalAlign: 'center',
-                paddingTop: '25px',
-                fontSize: '35px'
-            },
-            'onClick': this.start,
-            'onMouseDown': this.changeImage
-        }), React.createElement('span', {
+            'className': 'mic_on',
+            'id': 'logo',
+            'onClick': this.toggle_mic
+        }), React.createElement('img', {
+            'src': 'images/steve-logo-recording-with-mic.png',
+            'className': 'mic_on',
+            'id': 'logo_mic',
+            'onClick': this.toggle_mic
+        })), React.createElement('span', {
             'className': 'title',
             'style': {
                 textIndent: '-50px',
@@ -57,7 +52,7 @@ define([
                 textAlign: 'left',
                 margin: 'auto'
             }
-        }, this.state.grading ? React.createElement('div', {}, '\n            Grading: ', this.state.grading, '\n          ') : null, this.state.course ? React.createElement('div', {}, '\n            Course: ', this.state.course, this.state.dictating ? React.createElement('span', {}, ', \n              dictating for ', this.state.dictating, '\n            ') : null, React.createElement('p', {}, '\n              ', this.state.note, '\n            ')) : null, React.createElement.apply(this, [
+        }, this.state.grading ? React.createElement('div', {}, '\n          Grading: ', this.state.grading, '\n        ') : null, this.state.course ? React.createElement('div', {}, '\n          Course: ', this.state.course, this.state.dictating ? React.createElement('span', {}, ', \n          dictating for ', this.state.dictating, '\n          ') : null, React.createElement('p', {}, '\n            ', this.state.note, '\n          ')) : null, React.createElement.apply(this, [
             'ul',
             {
                 'style': {
@@ -66,6 +61,6 @@ define([
                 }
             },
             _.map(this.state.log, repeatItem1.bind(this))
-        ]))))));
+        ])))));
     };
 });

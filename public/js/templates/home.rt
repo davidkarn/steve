@@ -13,30 +13,31 @@
       </div>
       <br /><br />
       <div class="logo" style="text-align:center;">
-    		
-    	<img src="images/steve-logo.png" id="myImage" style="display:inline-block;width:25%;color:#ddd;height:25%;opacity:0.7;vertical-align:center;padding-top:25px;font-size:35px;" onClick="{this.start}" onMouseDown="{this.changeImage}"></img>
-          
-	<span class="title" style="text-indent:-50px; margin-top:20px;"><span>“ok </span>steve”</span>
-        <br /><br />
-        <div style="width:400px; text-align:left;;margin:auto;">
-          <div rt-if="this.state.grading">
-            Grading: {this.state.grading}
-          </div>
-          <div rt-if="this.state.course">
-            Course: {this.state.course}<span rt-if="this.state.dictating">, 
-              dictating for {this.state.dictating}
-            </span>
-            <p>
-              {this.state.note}
-            </p>
-          </div>
-          <ul style="font-size:1.5em;padding:0;">
-            <li rt-repeat="item in this.state.log" style="list-style:none;text-indent:none;">
-              {item}
-            </li>
-          </ul>
+    	
+    	<img src="images/steve-logo.png" class="mic_on" id="logo" onClick="{this.toggle_mic}">
+        <img src="images/steve-logo-recording-with-mic.png" class="mic_on" id="logo_mic" onClick="{this.toggle_mic}">
+      </div>
+      
+      <span class="title" style="text-indent:-50px; margin-top:20px;"><span>“ok </span>steve”</span>
+      <br /><br />
+      <div style="width:400px; text-align:left;;margin:auto;">
+        <div rt-if="this.state.grading">
+          Grading: {this.state.grading}
         </div>
-      </div>   
+        <div rt-if="this.state.course">
+          Course: {this.state.course}<span rt-if="this.state.dictating">, 
+          dictating for {this.state.dictating}
+          </span>
+          <p>
+            {this.state.note}
+          </p>
+        </div>
+        <ul style="font-size:1.5em;padding:0;">
+          <li rt-repeat="item in this.state.log" style="list-style:none;text-indent:none;">
+            {item}
+          </li>
+        </ul>
+      </div>
     </header>
   </div>
 </div>
