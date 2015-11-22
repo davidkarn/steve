@@ -267,11 +267,20 @@ app.post('/api/v1/parse', function(req, res) {
     names           = req.body.students;
     courses         = req.body.courses;
     assignments     = req.body.assignments;
+    var first       = false;
+    var i           = 0;
 
-    for (var i in messages) {
-        fns.push(curry(process_message, messages[i])); }
-    process_message(messages[i], function(x) {
-        res.json(x); }); });
+    function do_this() {
+        if (!messages[i]) return first;
+        process_message(messages[i], function(x) {
+            console.log('test', x, i, messages[i], x[0].command);
+            if (!x[0].command) {
+                if (!first) first = x;
+                i += 1;
+                do_this(); }
+            else
+                res.json(x); }); }
+    do_this(); });
 
 //
 // CANVAS API

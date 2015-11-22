@@ -95,7 +95,7 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         annyang.debug();
         annyang.addCommands(commands);
         annyang.addCallback('result', function (said) {
-            me.post_message(said[0]); });
+            me.post_message(said[0], said); });
         annyang.addCallback('end', function() {
             turn_off_mic();
         });
@@ -169,18 +169,17 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
 
         this.post_message(message); }
 
-    function post_message(message) {
+    function post_message(message, messages) {
         var me = this;
         $.ajax({type: 'post',
                 url: '/api/v1/parse',
-                data: {messages:    [message],
+                data: {messages:    (messages || [message]),
                        dictating:    this.state.dictating,
                        course:       this.state.course,
                        courses:      course_names(),
                        students:     student_names(),
                        assignments:  assignment_names()},
                 success: function(response) {
-                    console.log(response);
                     response.map(me.process_part);
                    me.setState({parsed: response[0].sentance.join(" ")}); },
                 error: function(x) {
