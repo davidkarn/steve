@@ -293,6 +293,7 @@ var moodle_endpoint  = moodle_url + 'moodle/webservice/rest/server.php';
 var moodle_cmds      = {get_courses:      'core_course_get_courses',
                         get_users:        'core_enrol_get_enrolled_users',
                         save_grade:       'mod_assign_save_grade',
+                        add_note:         'core_notes_create_notes',
                         get_assignments:  'mod_assign_get_assignments'};
 
 function moodle_api(fn_name, params, next) {

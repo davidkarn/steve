@@ -11,6 +11,14 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
 
     function complete_dictation() {
         var note = this.state.note;
+
+        call_moodle('add_note', {notes: [{
+            userid: user_id,
+            publishstate: 'course',
+            courseid: course_id,
+            text: note,
+            format: 2}]}); 
+        
         this.add_log('Dicated: "' + note + '" for ' + this.state.dictating + ' in ' + this.state.course);
         this.setState({note: '', dictating: false, course: false}); }
 
