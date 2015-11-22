@@ -61,6 +61,6 @@ define([
                 }
             },
             _.map(this.state.log, repeatItem1.bind(this))
-        ])))), React.createElement('div', {}, React.createElement('div', { 'className': 'main' }, React.createElement('h1', {}, 'Say Something'), React.createElement('h2', {}, this.state.message), React.createElement('p', {}, '\n        ', this.state.parsed, '\n      '))));
+        ])))));
     };
 });

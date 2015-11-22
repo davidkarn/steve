@@ -81,6 +81,7 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
 
     function setup_annyang() {
         var me = this;
+
         var commands = {
             'steve make me a sandwich': function() {
                 me.setState({message: "I'm sorry Dave, I can't do that."}); },
@@ -127,8 +128,9 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         return speech.speak(text); }
 
     function add_log(message) {
-        this.setState({log: [message].concat(this.state.log)}); }
-    
+        this.setState({log: [message]}); }
+//        this.setState({log: [message].concat(this.state.log)}); }
+
     function process_part(part) {
         if (part.steve_did) {
             this.add_log(part.steve_did);
@@ -139,7 +141,7 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
 
         if (part.command == 'enter_course') 
             this.setState({course: part.params.for || "."});
-        console.log('part', part, part.command, this.state, this.state.note);
+
         if (part.command == 'finished')
             if (this.state.dictating)
                 this.complete_dictation();

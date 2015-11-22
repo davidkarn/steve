@@ -43,13 +43,4 @@
       </div>
     </header>
   </div>
-  <div>
-    <div class="main">
-      <h1>Say Something</h1>
-      <h2>{this.state.message}</h2>
-      <p>
-        {this.state.parsed}
-      </p>
-    </div> 
-  </div>
 </div>
