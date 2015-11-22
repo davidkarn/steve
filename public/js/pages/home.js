@@ -80,11 +80,12 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
             'test': function() {
                 console.log('hello', arguments);
                 me.setState({message: "Sup dog."}); }}; 
-        console.log(commands);        
+        console.log(commands);
+        annyang.debug();
         annyang.addCommands(commands);
         annyang.addCallback('result', function (said) {
             me.post_message(said[0]); });
-        annyang.start({ autoRestart: true, continuous: false }); }
+        annyang.start({ autoRestart: true, continuous: false }); } }
 
     function speak(text) {
         speech.setVoice('Google UK English Male');
@@ -141,7 +142,7 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
                 success: function(response) {
                     console.log(response);
                     response.map(me.process_part);
-                   me.setState({parsed: JSON.stringify(response)}); },
+                   me.setState({parsed: response[0].sentance.join(" ")}); },
                 error: function(x) {
                     console.log(x); }}); }
             
