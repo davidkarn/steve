@@ -251,8 +251,9 @@ form textarea{
 }
 /* styles */
 body{
-	border-top:2px solid #2d2d2d;
+    border-top:2px solid #2d2d2d;
 	background:#f9f9f9 url('images/bg.jpg');
+    background: white;
 }
 .wrap{
 	padding:20px;
