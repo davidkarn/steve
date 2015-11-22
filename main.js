@@ -62,9 +62,7 @@ function parts_of_speech(string, next) {
     pos.partsOfSpeech(string, next || do_nothing); }
 
 function process_message(msg, next) {
-    console.log(msg);
     parts_of_speech(msg, function(pos) {
-        console.log(pos[0]);
         next(get_commands(pos[0])); }); }
 
 function cmpi(w1, w2) {
@@ -149,7 +147,9 @@ function what_steve_did(cmd) {
                 + ((cmd.params.out_of && ' out of '
                    + cmd.params.out_of.toString()) || '')) + '.';
     if (cmd.command == 'stop_grading')
-        return 'Finished grading.'; }
+        return 'Finished grading.';
+    if (!cmd.command)
+        return "I'm sorry, I can't do that."; }
         
 function extract_command(sentance) {
     var words       = sentance.map(extractor('word')).map(runner('toLowerCase'));
@@ -162,13 +162,13 @@ function extract_command(sentance) {
 
 function get_commands(pos) {
     pos = remove_ok_steve(pos);
-    console.log(pos);
+
     return split_commands(pos).map(extract_command); }
 
 function do_in_sequence(fns, last) {
     function go() {
         var fn = fns.shift();
-        console.log(fn);
+
         if (!fn)
             (last || do_nothing)();
         else
@@ -206,7 +206,6 @@ app.post('/api/v1/parse', function(req, res) {
     var fns         = [];
 
     for (var i in messages) {
-        console.log(messages[i]);
         fns.push(curry(process_message, messages[i])); }
     process_message(messages[i], function(x) {
         res.json(x); }); });
@@ -243,5 +242,39 @@ app.get('/connect/canvas', function(req, res) {
                       console.log(result);
                       res.redirect('/#/home?canvas_token='
                                    + result.access_token.toString()); }); });
+
+//
+// Moodle
+//
+
+var moodle_key       = 'd962f2897bb81c6294e8637d6c6047b2';
+var moodle_url       = 'http://canvas.emanuelzephir.com/';
+var moodle_endpoint  = moodle_url + 'moodle/webservice/rest/server.php';
+var moodle_cmds      = {get_courses:      'core_course_get_courses',
+                        get_users:        'core_enrol_get_enrolled_users',
+                        save_grade:       'mod_assign_save_grade',
+                        get_assignments:  'mod_assign_get_assignments'};
+
+function moodle_api(fn_name, params, next) {
+    params.wsfunction   = fn_name;
+    params.wstoken      = moodle_key;
+    params.moodlewsrestformat = 'json';
+
+    request.post(moodle_endpoint,
+                 {form: params},
+                 function(err, response, body) {
+                     if (err) {
+                         next(false);
+                         console.log('error', err, body, response); }
+                     body = JSON.parse(body);
+                     console.log(body); 
+                     next(body); }); }
+
+app.post('/api/v1/moodle', function(req, res) {
+    var command = moodle_cmds[req.body.command];
+    var params  = req.body.params || {};
+
+    moodle_api(command, params, function(response) {
+        res.json(response); }); });    
 
 app.use(express.static(process.cwd() + '/public')); 
