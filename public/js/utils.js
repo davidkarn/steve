@@ -364,3 +364,6 @@ function object_in_list(object, list) {
         if (list[i].id == object.id)
             return true;
     return false; }
+
+function joiner(a1, a2) {
+    return a1.concat(a2); }

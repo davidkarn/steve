@@ -66,7 +66,8 @@ function process_message(msg, next) {
         next(get_commands(pos[0])); }); }
 
 function cmpi(w1, w2) {
-    return (w1 || "").toLowerCase() == (w2 || "").toLowerCase(); }
+    return ((w1 || "").toLowerCase() == (w2 || "").toLowerCase()
+            || clj.metrics.jaro(w1, w2) > 0.8); }
 
 function remove_ok_steve(pos) {
     var last_was_ok = false;
@@ -102,13 +103,19 @@ function runner(x) {
 function member(ar, value) {
     return ar.indexOf(value) >= 0; }
 
+function member_i(ar, value) {
+    for (var i in ar)
+        if (cmpi(ar[i], value))
+            return ar[i];
+    return false; }   
+
 function command_name(words) {
-    if (words[0] == 'start' && words[1] == 'grading')
+    if (cmpi(words[0], 'start') && cmpi(words[1], 'grading'))
         return 'start_grading';
-    if (member(['stop', 'done', 'finished'], words[0]) && words[1] == 'grading')
+    if (member_i(['stop', 'done', 'finished'], words[0]) && cmpi(words[1], 'grading'))
         return 'stop_grading';
-    if (member(['scored', 'score', 'scores'], words[1])
-        || member(['scored', 'score', 'scores'], words[2]))
+    if (member_i(['scored', 'score', 'scores'], words[1])
+        || member_i(['scored', 'score', 'scores'], words[2]))
         return 'update_grade'; }
 
 function after_word(words, word_choices) {
@@ -148,7 +155,7 @@ function what_steve_did(cmd) {
                    + cmd.params.out_of.toString()) || '')) + '.';
     if (cmd.command == 'stop_grading')
         return 'Finished grading.';
-    if (!cmd.command)
+    if (!cmd.command && cmd.sentance[0] == 'ok' && cmd.sentance[0] == 'steve')
         return "I'm sorry, I can't do that."; }
         
 function extract_command(sentance) {
