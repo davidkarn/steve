@@ -76,7 +76,7 @@ function remove_ok_steve(pos) {
     for (var i in pos) {
         if (cmpi(pos[i].word, "ok"))
             last_was_ok = true;
-        else if (cmpi(pos[i].word, "steve") && (i == 0 || last_was_ok)) {
+        else if (cmpi(pos[i].word, "steve") && (/*i == 0 || */ last_was_ok)) {
             started_with_ok = true;
             return pos.slice(parseInt(i) + 1); }
         else
@@ -163,13 +163,24 @@ function command_params(command, words) {
     if (command == 'update_grade') {
         var student       = before_word(words, ['scored', 'score', 'scores']).join(" ");
         var scores        = after_word(words, ['scored', 'score', 'scores']);
-        var first_score   = parseInt(before_word(scores, ['out']).join(" ").match(/[0-9]+/)[0]);
+        var first_score   = before_word(scores, ['out']).join(" ").match(/[0-9]+/);
+        first_score       = parseInt((first_score && first_score[0]) || 0);
+                                     
         var second_score  = parseInt(after_word(scores, ['of']).join(" "));
-        return {student: closest_name(student, names),
-                score:   first_score,
-                out_of:  second_score}; }}
+        return {student:            closest_name(student, names),
+                supplied_student:   student,
+                score:              first_score,
+                out_of:             second_score}; }}
         
 function what_steve_did(cmd) {
+    if (cmd.invalid_command) {
+        if (cmd.invalid_command == 'update_grade') {
+            return cmd.params.supplied_student + " isn't in the class."; }
+        if (cmd.invalid_command == 'enter_course') {
+            return "I couldn't find that class."; }
+        if (cmd.invalid_command == 'start_grading') {
+            return "I couldn't find that assignment."; }}
+        
     if (cmd.command == 'enter_course')
         return 'Opening ' + (cmd.params.for || 'course') + '.';
     if (cmd.command == 'finished')
@@ -185,7 +196,7 @@ function what_steve_did(cmd) {
     if (cmd.command == 'stop_grading')
         return 'Finished grading.';
     if (!cmd.command && cmd.sentance[0] == 'ok' && cmd.sentance[0] == 'steve'|| started_with_ok)
-        return "I'm sorry, I can't do that."; }
+        return "Sorry, I don't understand that."; }
         
 function extract_command(sentance) {
     var words       = sentance.map(extractor('word')).map(runner('toLowerCase'));
@@ -193,8 +204,14 @@ function extract_command(sentance) {
                        command:    command_name(words)};
     
     obj.params      = command_params(obj.command, words);
-    if ((obj.command == 'enter_course' || obj.command == 'start_grading') && !obj.params.for) {
+    console.log(obj);
+    if (((obj.command == 'enter_course'
+         || obj.command == 'start_grading')
+         && !obj.params.for)
+       || (obj.command == 'update_grade' && !obj.params.student)) {
+        obj.invalid_command = obj.command;
         obj.command = false; }
+    console.log(obj);
     obj.steve_did   = what_steve_did(obj);
     return obj; }    
 
@@ -234,9 +251,12 @@ function closest_name(name, names) {
     var highest_score = 0;
     for (var i in names) {
         var score = compare_names(name, names[i]);
+        console.log(score, name, names[i]);
         if (score > highest_score) {
             highest       = names[i];
             highest_score = score; }}
+    if (highest_score < 1.5)
+        return false;
     return highest; }
     
 
