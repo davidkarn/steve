@@ -1,23 +1,50 @@
 <div>
-  <div class="main">
-    <h1>Say Something</h1>
-    <h2>{this.state.message}</h2>
-    <div rt-if="this.state.grading">
-      Grading {this.state.grading}
-    </div>
-    <button onClick="{this.connect_with_canvas}">Connect with Canvas</button>
-    <form onSubmit="{this.run_message}">
-      <textarea ref="input" placeholder="or type something"></textarea>
-      <input type="submit">
-    </form>
-    <p>
-      {this.state.parsed}
-    </p>
-    <ul>
-      <li rt-repeat="item in this.state.log">
-        {item}
-      </li>
-    </ul>
-  </div> 
+  <div class="wrap">
+    <header>
+      <div class="dropdown" style="float:right;">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="background:none;border:0;box-shadow:none;font-size:2em;color:#333;opacity:0.6">
+          <i class="fa fa-bars"></i>
+        </button>
+        <ul class="dropdown-menu"  >
+          <li><a href="#">HTML</a></li>
+          <li><a href="#">CSS</a></li>
+          <li><a href="#">JavaScript</a></li>
+        </ul>
+      </div>
+      <br /><br />
+      <div class="logo" style="text-align:center;">
+    		
+    	<div id="myImage" style="background-color:#223355;display:inline-block;border-radius:50px;width:100px;color:#ddd;height:100px;opacity:0.7;vertical-align:center;padding-top:25px;font-size:35px;" onClick="{this.start}" onMouseDown="{this.changeImage}"><i class="fa fa-microphone"></i></div>
+          
+	<span class="title" style="text-indent:-50px; margin-top:20px;"><span>“ok </span>steve”</span>
+        <br /><br />
+        <div style="width:400px; text-align:left;;margin:auto;">
+          <div rt-if="this.state.grading">
+            Grading {this.state.grading}
+          </div>
+      <ul style="font-size:1.5em;padding:0;">
+        <li rt-repeat="item in this.state.log" style="list-style:none;text-indent:none;">
+          {item}
+        </li>
+      </ul>
+        </div>
+
+    		
+      </div>   
+    </header>
+  </div>
+  <div>
+    <div class="main">
+      <h1>Say Something</h1>
+      <h2>{this.state.message}</h2>
+      <button onClick="{this.connect_with_canvas}">Connect with Canvas</button>
+      <form onSubmit="{this.run_message}">
+        <textarea ref="input" placeholder="or type something"></textarea>
+        <input type="submit">
+      </form>
+      <p>
+        {this.state.parsed}
+      </p>
+    </div> 
+  </div>
 </div>
- 

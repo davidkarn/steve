@@ -57,6 +57,13 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
                 error: function(x) {
                     console.log(x); }}); }
             
+    function changeImage() {
+        var image = document.getElementById('myImage');
+        if (image.src.match("bulbon")) 
+            image.src = "logo2.png";
+        else 
+            image.src = "logo.png"; }
+
     function render() {
         return home_template.apply(this, arguments); }
 
