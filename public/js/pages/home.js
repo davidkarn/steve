@@ -1,6 +1,54 @@
 define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_template) {
     'use strict';
-    var speech = new p5.Speech();
+    var speech         = new p5.Speech();
+    var courses        = [];
+    var assignments    = [];
+    var users          = [];
+
+    function init_moodle() {
+        get_courses(); }
+
+    function get_courses(next) {
+        call_moodle('get_courses', {}, function(r) {
+            courses = r;
+            console.log('courses', courses);
+            get_assignments(); }); }
+
+    function get_assignments() {
+            call_moodle('get_assignments', {}, function(r) {
+                assignments = r.courses.map(extractor('assignments')).reduce(joiner);
+                console.log('assignments', r);
+                get_users(); }); }
+            
+    function get_users() {
+        courses.map(function(course) {
+            call_moodle('get_users', {courseid: course.id}, function(r) {
+                course.users = r;
+                console.log('users', r); }); }); }
+
+    function student_names() {
+        return courses.map(extractor('users'))
+            .reduce(joiner)
+            .map(extractor('fullname')); }
+
+    function assignment_names() {
+        return assignments.map(extractor('name')); }
+
+    function course_names() {
+        return courses.map(extractor('fullname')); }
+
+    function lookup_assignment(name) {
+        for (var i in assignments) {
+            if (assignments[i].name == name)  
+                return assignments[i]; }
+        return false; }
+
+    function lookup_student(name) {
+        for (var i in courses) {
+            for (var j in courses[i].users)
+                if (courses[i].users[j].fullname == name)
+                    return courses[i].users[j]; }
+        return false; }
 
     function setup_annyang() {
         var me = this;
@@ -16,8 +64,7 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         console.log(commands);        
         annyang.addCommands(commands);
         annyang.addCallback('result', function (said) {
-            post_message(said[0]); });
-        annyang.debug();
+            me.post_message(said[0]); });
         annyang.start({ autoRestart: true, continuous: false }); }
 
     function speak(text) {
@@ -49,11 +96,25 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         var me = this;
         $.ajax({type: 'post',
                 url: '/api/v1/parse',
-                data: {messages: [message]},
+                data: {messages:    [message],
+                       students:     student_names(),
+                       assignments:  assignment_names()},
                 success: function(response) {
                     console.log(response);
                     response.map(me.process_part);
                    me.setState({parsed: JSON.stringify(response)}); },
+                error: function(x) {
+                    console.log(x); }}); }
+            
+    function call_moodle(command, params, next) {
+        var me = this;
+        $.ajax({type: 'post',
+                url: '/api/v1/moodle',
+                data: {command:  command,
+                       params:   params},
+                success: function(response) {
+                    console.log(response);
+                    next(response); },
                 error: function(x) {
                     console.log(x); }}); }
             
@@ -67,6 +128,8 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
     function render() {
         return home_template.apply(this, arguments); }
 
+    init_moodle();
+    
     return React.createClass({
         displayName:         'home',
         go_to:                go_to,
