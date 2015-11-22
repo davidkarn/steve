@@ -46,16 +46,7 @@ define([
                 textIndent: '-50px',
                 marginTop: '20px'
             }
-        }), React.createElement('br', {}), React.createElement('br', {}), React.createElement('div', {
-            'style': {
-                width: '400px',
-                margin: 'auto',
-                fontWeight: '300',
-                textAlign: 'center',
-                color: 'rgba(0,0,0,0.8)',
-                fontFamily: 'helvetica neue, helvetica, arial, sans-serif !important'
-            }
-        }, this.state.grading ? React.createElement('div', {}, '\n          Grading: ', this.state.grading, '\n        ') : null, this.state.course ? React.createElement('div', {}, '\n          Course: ', this.state.course, this.state.dictating ? React.createElement('span', {}, ', \n          dictating for ', this.state.dictating, '\n          ') : null, React.createElement('p', {}, '\n            ', this.state.note, '\n          ')) : null, React.createElement.apply(this, [
+        }), React.createElement('br', {}), React.createElement('br', {}), React.createElement('div', { 'id': 'response' }, this.state.grading ? React.createElement('div', {}, '\n          Grading: ', this.state.grading, '\n        ') : null, this.state.course ? React.createElement('div', {}, '\n          Course: ', this.state.course, this.state.dictating ? React.createElement('span', {}, ', \n          dictating for ', this.state.dictating, '\n          ') : null, React.createElement('p', {}, '\n            ', this.state.note, '\n          ')) : null, React.createElement.apply(this, [
             'ul',
             {
                 'style': {

@@ -20,7 +20,7 @@
       
       <span class="title" style="text-indent:-50px; margin-top:20px;"></span>
       <br /><br />
-      <div style="width:400px;margin:auto;font-weight:300;text-align:center;color:rgba(0,0,0,0.8);font-family: helvetica neue, helvetica, arial, sans-serif !important;">
+      <div id="response">
         <div rt-if="this.state.grading">
           Grading: {this.state.grading}
         </div>

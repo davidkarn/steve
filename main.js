@@ -80,7 +80,8 @@ function remove_ok_steve(pos) {
     for (var i in pos) {
         if (cmpi(pos[i].word, "ok") || cmpi(pos[i].word, "okay"))
             last_was_ok = true;
-        else if (cmpi(pos[i].word, "steve") && (/*i == 0 || */ last_was_ok)) {
+        else if ((cmpi(pos[i].word, "steve") && (/*i == 0 || */ last_was_ok))
+                 || cmpi(pos[i].word, "okc")) {
             started_with_ok = true;
             return pos.slice(parseInt(i) + 1); }
         else
