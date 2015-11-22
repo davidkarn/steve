@@ -132,7 +132,7 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         if (part.command == 'update_grade')
             update_grade(lookup_student(part.params.student),
                          lookup_assignment(this.state.grading),
-                         (part.params.score / (part.params.out_of || 100)));
+                         (100 * (part.params.score / (part.params.out_of || 100))));
         
         if (part.command == 'stop_grading') 
             this.setState({grading: false}); }
@@ -186,7 +186,6 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
             annyang.start({autoRestart: false, continuous: false});
             mic_is_on = true;
         }
-
     }
 
     function turn_off_mic() {
