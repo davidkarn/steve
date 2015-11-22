@@ -4,10 +4,25 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
     var courses        = [];
     var assignments    = [];
     var users          = [];
+    var dictating      = false;
 
     function init_moodle() {
         get_courses(); }
 
+    function update_grade(user, assignment, grade, next) {
+        call_moodle("save_grade",
+                    {assignmentid:     assignment.id,
+                     userid:           user.id,
+                     grade:            grade,
+                     attemptnumber:    1,
+                     addattempt:       0,
+                     workflowstate:   "graded",
+                     applytoall:       0,
+                     plugindata:      {assignfeedbackcomments_editor:  {text:   "update from steve",
+                                                                        format:  0},
+                                       files_filemanager:0}},
+                    next || do_nothing); }
+    
     function get_courses(next) {
         call_moodle('get_courses', {}, function(r) {
             courses = r;
@@ -79,6 +94,14 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
 
         if (part.command == 'start_grading') 
             this.setState({grading: part.params.for || "."});
+
+        if (part.command == 'enter_course') 
+            this.setState({course: part.params.for || "."});
+
+        if (part.command == 'update_grade')
+            update_grade(lookup_student(part.params.student),
+                         lookup_assignment(this.state.grading),
+                         (part.params.score / (part.params.out_of || 100)));
         
         if (part.command == 'stop_grading') 
             this.setState({grading: false}); }
@@ -98,6 +121,9 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         $.ajax({type: 'post',
                 url: '/api/v1/parse',
                 data: {messages:    [message],
+                       dictating:    dictating,
+                       course:       this.state.course,
+                       courses:      course_names(),
                        students:     student_names(),
                        assignments:  assignment_names()},
                 success: function(response) {
@@ -142,5 +168,6 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         getInitialState:      returner({message:  '',
                                         parsed:   '',
                                         grading:  false,
+                                        course:   false,
                                         log:      []}),
         render:               render}); });

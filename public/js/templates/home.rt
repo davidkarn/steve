@@ -22,11 +22,14 @@
           <div rt-if="this.state.grading">
             Grading {this.state.grading}
           </div>
-      <ul style="font-size:1.5em;padding:0;">
-        <li rt-repeat="item in this.state.log" style="list-style:none;text-indent:none;">
-          {item}
-        </li>
-      </ul>
+          <div rt-if="this.state.course">
+            Course {this.state.course}
+          </div>
+          <ul style="font-size:1.5em;padding:0;">
+            <li rt-repeat="item in this.state.log" style="list-style:none;text-indent:none;">
+              {item}
+            </li>
+          </ul>
         </div>
 
     		

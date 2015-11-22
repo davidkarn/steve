@@ -9,7 +9,7 @@ define([
                 listStyle: 'none',
                 textIndent: 'none'
             }
-        }, '\n          ', item, '\n        ');
+        }, '\n              ', item, '\n            ');
     }
     return function () {
         return React.createElement('div', {}, React.createElement('div', { 'className': 'wrap' }, React.createElement('header', {}, React.createElement('div', {
@@ -58,7 +58,7 @@ define([
                 textAlign: 'left',
                 margin: 'auto'
             }
-        }, this.state.grading ? React.createElement('div', {}, '\n            Grading ', this.state.grading, '\n          ') : null, React.createElement.apply(this, [
+        }, this.state.grading ? React.createElement('div', {}, '\n            Grading ', this.state.grading, '\n          ') : null, this.state.course ? React.createElement('div', {}, '\n            Course ', this.state.course, '\n          ') : null, React.createElement.apply(this, [
             'ul',
             {
                 'style': {
