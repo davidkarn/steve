@@ -211,4 +211,37 @@ app.post('/api/v1/parse', function(req, res) {
     process_message(messages[i], function(x) {
         res.json(x); }); });
 
+//
+// CANVAS API
+//
+
+var canvas_scopes;
+var canvas_clientid      = 'dj0yJmk9eVI0d3FidHZSS1BtJmQ9WVdrOU9VbGlSRzR4Tkc4bWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD1kNA--';
+var canvas_secret        = 'b5f9016d027449189fcfaa31a9de43104c2f10e1';
+var canvas_redirect_url  = 'http://localhost:8080/connect/canvas';
+
+
+var canvas_oauth2 = require('simple-oauth2')(
+    {clientID:             canvas_clientid,
+     clientSecret:         canvas_secret,
+     site:                 'http://canvas.emanuelzephir.com:3000',
+     authorizationPath:   "/login/oauth2/auth",
+     tokenPath:           "/login/oauth2/token"});
+ 
+app.get('/auth/canvas', function (req, res) {
+    res.redirect(canvas_oauth2.authCode.authorizeURL({
+        redirect_uri:    canvas_redirect_url,
+        scope:           (canvas_scopes || []).join(" ")})); });
+
+app.get('/connect/canvas', function(req, res) {
+    var code = req.query.code;
+    canvas_oauth2
+        .authCode
+        .getToken({code:           code,
+                   redirect_uri:   canvas_redirect_url},
+                  function(error, result) {
+                      console.log(result);
+                      res.redirect('/#/home?canvas_token='
+                                   + result.access_token.toString()); }); });
+
 app.use(express.static(process.cwd() + '/public')); 

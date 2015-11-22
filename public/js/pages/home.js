@@ -32,6 +32,9 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
             this.setState({log: this.state.log.concat([part.steve_did])});
             speak(part.steve_did); }}
 
+    function connect_with_canvas() {
+        window.location.href = ('/auth/canvas'); }
+
     function run_message(e) {
         var me = this;
         e.preventDefault();
@@ -55,6 +58,7 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         go_to:                go_to,
         process_part:         process_part,
         run_message:          run_message,
+        connect_with_canvas:  connect_with_canvas,
         componentWillMount:   setup_annyang,
         getInitialState:      returner({message: '', parsed: '', log: []}),
         render:               render}); });
