@@ -117,7 +117,8 @@ function command_name(words) {
         return 'start_grading';
     if (cmpi(words[0], 'enter') || cmpi(words[0], 'open'))
         return 'enter_course';
-    if (cmpi(words[0], 'dictate'))
+    if (cmpi(words[0], 'dictate')
+        || (cmpi(words[0], 'start') && cmpi(words[0], 'dictating')))
         return 'dictate_note';
     if (member_i(['stop', 'done', 'finished'], words[0]) && cmpi(words[1], 'grading'))
         return 'stop_grading';

@@ -28,7 +28,7 @@
               dictating for {this.state.dictating}
             </span>
             <p>
-              {this.state.note}
+              {this.state.note}  
             </p>
           </div>
           <ul style="font-size:1.5em;padding:0;">

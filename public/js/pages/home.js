@@ -10,7 +10,8 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         get_courses(); }
 
     function complete_dictation() {
-        console.log('lets complete this shit', this.state);
+        var note = this.state.note;
+        this.add_log('Dicated: "' + note + '" for ' + this.state.dictating + ' in ' + this.state.course);
         this.setState({note: '', dictating: false, course: false}); }
 
     function update_grade(user, assignment, grade, next) {
@@ -85,15 +86,18 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         annyang.addCommands(commands);
         annyang.addCallback('result', function (said) {
             me.post_message(said[0]); });
-        annyang.start({ autoRestart: true, continuous: false }); } }
+        annyang.start({ autoRestart: true, continuous: false }); }
 
     function speak(text) {
         speech.setVoice('Google UK English Male');
         return speech.speak(text); }
 
+    function add_log(message) {
+        this.setState({log: [message].concat(this.state.log)}); }
+    
     function process_part(part) {
         if (part.steve_did) {
-            this.setState({log: this.state.log.concat([part.steve_did])});
+            this.add_log(part.steve_did);
             speak(part.steve_did); }
 
         if (part.command == 'start_grading') 
@@ -101,12 +105,12 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
 
         if (part.command == 'enter_course') 
             this.setState({course: part.params.for || "."});
-
+        console.log('part', part, part.command, this.state, this.state.note);
         if (part.command == 'finished')
             if (this.state.dictating)
                 this.complete_dictation();
-        else if (this.state.dictating) 
-            this.setState({note: this.state.note + part.sentance + '. '});
+        if (!part.command && this.state.dictating) 
+            this.setState({note: this.state.note + part.sentance.join(' ') + '. '});
 
         if (part.command == 'dictate_note') 
             this.setState({dictating: part.params.for || "."});
@@ -175,6 +179,7 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         go_to:                go_to,
         process_part:         process_part,
         post_message:         post_message,
+        add_log:              add_log,
         run_message:          run_message,
         connect_with_canvas:  connect_with_canvas,
         componentWillMount:   setup_annyang,
