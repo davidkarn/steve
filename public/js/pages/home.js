@@ -8,6 +8,20 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
     function init_moodle() {
         get_courses(); }
 
+    function update_grade(user, assignment, grade, next) {
+        call_moodle("save_grade",
+                    {assignmentid:     assignment.id,
+                     userid:           user.id,
+                     grade:            grade,
+                     attemptnumber:    1,
+                     addattempt:       0,
+                     workflowstate:   "graded",
+                     applytoall:       0,
+                     plugindata:      {assignfeedbackcomments_editor:  {text:   "update from steve",
+                                                                        format:  0},
+                                       files_filemanager:0}},
+                    next || do_nothing); }
+    
     function get_courses(next) {
         call_moodle('get_courses', {}, function(r) {
             courses = r;
@@ -78,6 +92,11 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
 
         if (part.command == 'start_grading') 
             this.setState({grading: part.params.for || "."});
+
+        if (part.command == 'update_grade')
+            update_grade(lookup_student(part.params.student),
+                         lookup_assignment(this.state.grading),
+                         (part.params.score / (part.params.out_of || 100)));
         
         if (part.command == 'stop_grading') 
             this.setState({grading: false}); }

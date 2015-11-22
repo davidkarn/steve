@@ -135,8 +135,10 @@ function before_word(words, word_choices) {
 
 function command_params(command, words) {
     if (command == 'start_grading') {
-        words = after_word(words, ['for']);
-        return {for: closest_name(words.join(" "), assignments)}; }
+        var end_words = after_word(words, ['for']);
+        if (!end_words[0]) end_words = after_word(words, ['grading']); 
+        console.log('assignments', assignments, end_words.join(" "));
+        return {for: closest_name(end_words.join(" "), assignments)}; }
     if (command == 'update_grade') {
         var student       = before_word(words, ['scored', 'score', 'scores']).join(" ");
         var scores        = after_word(words, ['scored', 'score', 'scores']);
@@ -211,6 +213,8 @@ function closest_name(name, names) {
 app.post('/api/v1/parse', function(req, res) {
     var messages    = req.body.messages;
     var fns         = [];
+    names           = req.body.students;
+    assignments     = req.body.assignments;
 
     for (var i in messages) {
         fns.push(curry(process_message, messages[i])); }
