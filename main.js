@@ -69,16 +69,19 @@ function cmpi(w1, w2) {
     return ((w1 || "").toLowerCase() == (w2 || "").toLowerCase()
             || clj.metrics.jaro(w1, w2) > 0.8); }
 
+// aaah, hack!
+var started_with_ok = false;
 function remove_ok_steve(pos) {
     var last_was_ok = false;
     for (var i in pos) {
         if (cmpi(pos[i].word, "ok"))
             last_was_ok = true;
         else if (cmpi(pos[i].word, "steve") && last_was_ok) {
-
+            started_with_ok = true;
             return pos.slice(parseInt(i) + 1); }
         else
             last_was_ok = false; }
+    started_with_ok = false;
     return pos; }
             
 function split_commands(pos) {
@@ -157,7 +160,7 @@ function what_steve_did(cmd) {
                    + cmd.params.out_of.toString()) || '')) + '.';
     if (cmd.command == 'stop_grading')
         return 'Finished grading.';
-    if (!cmd.command && cmd.sentance[0] == 'ok' && cmd.sentance[0] == 'steve')
+    if (!cmd.command && cmd.sentance[0] == 'ok' && cmd.sentance[0] == 'steve'|| started_with_ok)
         return "I'm sorry, I can't do that."; }
         
 function extract_command(sentance) {
