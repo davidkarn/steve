@@ -12,6 +12,10 @@ var session         = require('express-session');
 
 var app             = express();
 var port            = process.env.PORT || 8080;
+var names           = [];
+var courses         = [];
+var assignments     = [];
+
 
 app.listen(port);
 
@@ -74,7 +78,7 @@ var started_with_ok = false;
 function remove_ok_steve(pos) {
     var last_was_ok = false;
     for (var i in pos) {
-        if (cmpi(pos[i].word, "ok"))
+        if (cmpi(pos[i].word, "ok") || cmpi(pos[i].word, "okay"))
             last_was_ok = true;
         else if (cmpi(pos[i].word, "steve") && (/*i == 0 || */ last_was_ok)) {
             started_with_ok = true;
@@ -238,12 +242,6 @@ function compare_names(n1, n2) {
         clj.phonetics.metaphone(n1),
         clj.phonetics.metaphone(n2));
     return jaro + jaro_metaphone; }
-
-var names = ['Billy Johnson', 'Freddie Mercury', 'Freddie Kruger', 'Jimmy Johns', 'Papa Smurf',
-             'Bart Simpson', 'Ralph Wiggums', 'Milhouse Vanhouten'];
-var courses = [];
-
-var assignments = ['Science', 'Pop some punk ass bloods', 'Pet a Kitten', 'Reincarnate Satan', 'History', 'Literature', 'Pop quiz'];
 
 function closest_name(name, names) {
     if (!name) return name;
