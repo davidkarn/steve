@@ -81,7 +81,7 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         annyang.addCommands(commands);
         annyang.addCallback('result', function (said) {
             me.post_message(said[0]); });
-        annyang.start({ autoRestart: true, continuous: false }); }
+        annyang.start({ autoRestart: false }); }
 
     function speak(text) {
         speech.setVoice('Google UK English Male');
@@ -147,10 +147,10 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
             
     function changeImage() {
         var image = document.getElementById('myImage');
-        if (image.src.match("bulbon")) 
-            image.src = "logo2.png";
+        if (image.src.match("images/steve-logo.png"))
+            image.src = "images/steve-logo-recording-with-mic.png";
         else 
-            image.src = "logo.png"; }
+            image.src = "images/steve-logo.png"; }
 
     function render() {
         return home_template.apply(this, arguments); }
@@ -161,6 +161,8 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         displayName:         'home',
         go_to:                go_to,
         process_part:         process_part,
+        changeImage:          changeImage,
+        start:                annyang.start,
         post_message:         post_message,
         run_message:          run_message,
         connect_with_canvas:  connect_with_canvas,

@@ -14,7 +14,7 @@
       <br /><br />
       <div class="logo" style="text-align:center;">
     		
-    	<div id="myImage" style="background-color:#223355;display:inline-block;border-radius:50px;width:100px;color:#ddd;height:100px;opacity:0.7;vertical-align:center;padding-top:25px;font-size:35px;" onClick="{this.start}" onMouseDown="{this.changeImage}"><i class="fa fa-microphone"></i></div>
+    	<img src="images/steve-logo.png" id="myImage" style="display:inline-block;width:25%;color:#ddd;height:25%;opacity:0.7;vertical-align:center;padding-top:25px;font-size:35px;" onClick="{this.start}" onMouseDown="{this.changeImage}"></img>
           
 	<span class="title" style="text-indent:-50px; margin-top:20px;"><span>“ok </span>steve”</span>
         <br /><br />
