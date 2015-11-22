@@ -193,6 +193,8 @@ function extract_command(sentance) {
                        command:    command_name(words)};
     
     obj.params      = command_params(obj.command, words);
+    if ((obj.command == 'enter_course' || obj.command == 'start_grading') && !obj.params.for) {
+        obj.command = false; }
     obj.steve_did   = what_steve_did(obj);
     return obj; }    
 
