@@ -177,10 +177,14 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
                     next(response); },
                 error: function(x) {
                     console.log(x); }}); }
-            
+
+    var we_are_toggling = false;
+    
     function turn_on_mic() {
         // for some reason we seem to get this event too many times.
-
+        if (we_are_toggling) return;
+        we_are_toggling = true;
+        setTimeout(function() { we_are_toggling = false; }, 1000);
         if (!mic_is_on) {
             if (mobile_check()) {
                 $("#logo").hide();
@@ -197,6 +201,9 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
     }
 
     function turn_off_mic() {
+        if (we_are_toggling) return;
+        we_are_toggling = true;
+        setTimeout(function() { we_are_toggling = false; }, 1000);
         if (mic_is_on) {
             if (mobile_check()) {
                 $("#logo").show();

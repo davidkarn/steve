@@ -260,6 +260,12 @@ body{
 	margin:0 auto;
 }
 @media all and (min-width:240px) and (max-width:300px){
+                      .mic_on {
+	  -webkit-filter: drop-shadow(12px 12px 25px rgba(0,0,0,0.22));
+	  animation: none;
+	  position: relative;
+  }
+
                 #response {
                     max-width: 80vw; }
 	.wrap{
@@ -268,6 +274,12 @@ body{
 	}	
 }
 @media all and (min-width:320px) and (max-width:479px){
+                      .mic_on {
+	  -webkit-filter: drop-shadow(12px 12px 25px rgba(0,0,0,0.22));
+	  animation: none;
+	  position: relative;
+  }
+
                 #response {
                     max-width: 80vw; }
 	.wrap{
@@ -276,6 +288,12 @@ body{
 	}	
 }
 @media all and (min-width:480px) and (max-width:639px){
+                      .mic_on {
+	  -webkit-filter: drop-shadow(12px 12px 25px rgba(0,0,0,0.22));
+	  animation: none;
+	  position: relative;
+  }
+
                 #response {
                     max-width: 80vw; }
 	.wrap{
@@ -284,6 +302,11 @@ body{
 	}	
 }
 @media all and (min-width:640px) and (max-width:719px){
+                      .mic_on {
+	  -webkit-filter: none;
+	  animation: none;
+	  position: relative;
+  }
                     #response {
                         max-width: 80vw; }
 
@@ -291,6 +314,18 @@ body{
 		width:auto;
 	}	
 }
+
+@media all and (max-width:800px){
+  .mic_image {
+	  -webkit-filter: none !important; }
+        
+    .mic_on {
+        -webkit-filter: none !important;;
+        animation: none !important;;
+        position: relative;
+  }}
+
+
 .logo{
 	text-align:center;
 	padding:0 0 10px 0;
@@ -544,6 +579,12 @@ footer .menu{
             max-width:400px;margin:auto;font-weight:300;text-align:center;color:rgba(0,0,0,0.8);font-family: helvetica neue, helvetica, arial, sans-serif !important; }
         
             @media only screen and (max-device-width: 700px) {
+                  .mic_on {
+	  -webkit-filter: drop-shadow(12px 12px 25px rgba(0,0,0,0.22));
+	  animation: none;
+	  position: relative;
+  }
+
                 #response {
                     max-width: 80vw; }
             .wrap {
