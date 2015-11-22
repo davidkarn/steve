@@ -81,7 +81,7 @@ define(['react', 'lodash', 'templates/home.rt'], function (React, _, home_templa
         annyang.addCommands(commands);
         annyang.addCallback('result', function (said) {
             me.post_message(said[0]); });
-        annyang.start({ autoRestart: true, continuous: false }); } }
+        annyang.start({ autoRestart: true, continuous: false }); }
 
     function speak(text) {
         speech.setVoice('Google UK English Male');
