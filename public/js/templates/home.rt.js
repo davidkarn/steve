@@ -30,15 +30,14 @@ define([
         }, React.createElement('i', { 'className': 'fa fa-bars' })), React.createElement('ul', { 'className': 'dropdown-menu' }, React.createElement('li', {}, React.createElement('a', { 'href': '#' }, 'HTML')), React.createElement('li', {}, React.createElement('a', { 'href': '#' }, 'CSS')), React.createElement('li', {}, React.createElement('a', { 'href': '#' }, 'JavaScript')))), React.createElement('br', {}), React.createElement('br', {}), React.createElement('div', {
             'className': 'logo',
             'style': { textAlign: 'center' }
-        }, React.createElement('div', {
+        }, React.createElement('img', {
+            'src': 'images/steve-logo.png',
             'id': 'myImage',
             'style': {
-                backgroundColor: '#223355',
                 display: 'inline-block',
-                borderRadius: '50px',
-                width: '100px',
+                width: '25%',
                 color: '#ddd',
-                height: '100px',
+                height: '25%',
                 opacity: '0.7',
                 verticalAlign: 'center',
                 paddingTop: '25px',
@@ -46,7 +45,7 @@ define([
             },
             'onClick': this.start,
             'onMouseDown': this.changeImage
-        }, React.createElement('i', { 'className': 'fa fa-microphone' })), React.createElement('span', {
+        }), React.createElement('span', {
             'className': 'title',
             'style': {
                 textIndent: '-50px',
