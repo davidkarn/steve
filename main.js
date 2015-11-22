@@ -133,9 +133,9 @@ function command_name(words) {
         return 'update_grade'; }
 
 function after_word(words, word_choices) {
-    for (var i in words) {
+    for (var i in words) 
         if (member_i(word_choices, words[i]))
-            return words.slice(parseInt(i) + 1); }
+            return words.slice(parseInt(i) + 1); 
     return []; }
 
 function before_word(words, word_choices) {
@@ -153,26 +153,28 @@ function command_params(command, words) {
         end_words = after_word(words, ['course']);
         if (!end_words[0]) end_words = after_word(words, ['enter']);
         if (!end_words[0]) end_words = after_word(words, ['open']);        
-        console.log('courses', words, end_words, courses);
         return {for:   closest_name(end_words.join(" "), courses),
                 given: end_words.join(" ")}; }
+
     if (command == 'dictate_note') {
         end_words = after_word(words, ['for']);
         if (!end_words[0]) end_words = after_word(words, ['note']); 
         if (!end_words[0]) end_words = after_word(words, ['dictate']); 
         return {for:   closest_name(end_words.join(" "), names),
                 given: end_words.join(" ")}; }
+
     if (command == 'start_grading') {
         var end_words = after_word(words, ['for']);
         if (!end_words[0]) end_words = after_word(words, ['grading']); 
         return {for: closest_name(end_words.join(" "), assignments)}; }
+
     if (command == 'update_grade') {
         var student       = before_word(words, ['scored', 'score', 'scores']).join(" ");
         var scores        = after_word(words, ['scored', 'score', 'scores']);
         var first_score   = before_word(scores, ['out']).join(" ").match(/[0-9]+/);
         first_score       = parseInt((first_score && first_score[0]) || 0);
-                                     
         var second_score  = parseInt(after_word(scores, ['of']).join(" "));
+
         return {student:            closest_name(student, names),
                 supplied_student:   student,
                 score:              first_score,
@@ -210,14 +212,14 @@ function extract_command(sentance) {
                        command:    command_name(words)};
     
     obj.params      = command_params(obj.command, words);
-    console.log(obj);
+
     if (((obj.command == 'enter_course'
          || obj.command == 'start_grading')
          && !obj.params.for)
        || (obj.command == 'update_grade' && !obj.params.student)) {
         obj.invalid_command = obj.command;
         obj.command = false; }
-    console.log(obj);
+
     obj.steve_did   = what_steve_did(obj);
     return obj; }    
 
@@ -251,7 +253,6 @@ function closest_name(name, names) {
     var highest_score = 0;
     for (var i in names) {
         var score = compare_names(name, names[i]);
-        console.log(score, name, names[i]);
         if (score > highest_score) {
             highest       = names[i];
             highest_score = score; }}
@@ -301,7 +302,6 @@ app.get('/connect/canvas', function(req, res) {
         .getToken({code:           code,
                    redirect_uri:   canvas_redirect_url},
                   function(error, result) {
-                      console.log(result);
                       res.redirect('/#/home?canvas_token='
                                    + result.access_token.toString()); }); });
 
@@ -330,7 +330,6 @@ function moodle_api(fn_name, params, next) {
                          next(false);
                          console.log('error', err, body, response); }
                      body = JSON.parse(body);
-                     console.log(body); 
                      next(body); }); }
 
 app.post('/api/v1/moodle', function(req, res) {

@@ -11,16 +11,16 @@
           <li><a href="#">JavaScript</a></li>
         </ul>
       </div>
-      <br /><br />
+      
       <div class="logo" style="text-align:center;">
     	
     	<img src="images/steve-logo.png" class="mic_on" id="logo" onClick="{this.toggle_mic}">
         <img src="images/steve-logo-recording-with-mic.png" class="mic_on" id="logo_mic" onClick="{this.toggle_mic}">
       </div>
       
-      <span class="title" style="text-indent:-50px; margin-top:20px;"><span>“ok </span>steve”</span>
+      <span class="title" style="text-indent:-50px; margin-top:20px;"></span>
       <br /><br />
-      <div style="width:400px; text-align:left;;margin:auto;">
+      <div style="width:400px;margin:auto;font-weight:300;text-align:center;color:rgba(0,0,0,0.8);">
         <div rt-if="this.state.grading">
           Grading: {this.state.grading}
         </div>

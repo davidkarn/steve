@@ -27,7 +27,7 @@ define([
                 color: '#333',
                 opacity: '0.6'
             }
-        }, React.createElement('i', { 'className': 'fa fa-bars' })), React.createElement('ul', { 'className': 'dropdown-menu' }, React.createElement('li', {}, React.createElement('a', { 'href': '#' }, 'HTML')), React.createElement('li', {}, React.createElement('a', { 'href': '#' }, 'CSS')), React.createElement('li', {}, React.createElement('a', { 'href': '#' }, 'JavaScript')))), React.createElement('br', {}), React.createElement('br', {}), React.createElement('div', {
+        }, React.createElement('i', { 'className': 'fa fa-bars' })), React.createElement('ul', { 'className': 'dropdown-menu' }, React.createElement('li', {}, React.createElement('a', { 'href': '#' }, 'HTML')), React.createElement('li', {}, React.createElement('a', { 'href': '#' }, 'CSS')), React.createElement('li', {}, React.createElement('a', { 'href': '#' }, 'JavaScript')))), React.createElement('div', {
             'className': 'logo',
             'style': { textAlign: 'center' }
         }, React.createElement('img', {
@@ -46,11 +46,13 @@ define([
                 textIndent: '-50px',
                 marginTop: '20px'
             }
-        }, React.createElement('span', {}, '\u201Cok '), 'steve\u201D'), React.createElement('br', {}), React.createElement('br', {}), React.createElement('div', {
+        }), React.createElement('br', {}), React.createElement('br', {}), React.createElement('div', {
             'style': {
                 width: '400px',
-                textAlign: 'left',
-                margin: 'auto'
+                margin: 'auto',
+                fontWeight: '300',
+                textAlign: 'center',
+                color: 'rgba(0,0,0,0.8)'
             }
         }, this.state.grading ? React.createElement('div', {}, '\n          Grading: ', this.state.grading, '\n        ') : null, this.state.course ? React.createElement('div', {}, '\n          Course: ', this.state.course, this.state.dictating ? React.createElement('span', {}, ', \n          dictating for ', this.state.dictating, '\n          ') : null, React.createElement('p', {}, '\n            ', this.state.note, '\n          ')) : null, React.createElement.apply(this, [
             'ul',
