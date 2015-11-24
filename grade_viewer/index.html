@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Moodle LMS</title>
+    <script src="jquery.min.js"></script>
+    <script src="code.js"></script>
+    <link rel="stylesheet" href="main.css"/>
+</head>
+<body>
+<img src="moodle-logo.png">
+    <script>
+        $(document).ready(function () {
+            xhrRequest = jQuery.ajax("http://canvas.emanuelzephir.com/moodle/webservice/rest/server.php?" +
+                        "wstoken=d962f2897bb81c6294e8637d6c6047b2&"+
+                        "wsfunction=core_enrol_get_enrolled_users&"+
+                        "moodlewsrestformat=json&"+
+                        "courseid=1").done(function (items) {
+                populateTable(items)
+            });
+        });
+
+        updateGrades();
+    </script>
+<h2>Midterms</h2>
+    <table id="records_table"></table>
+</body>
+</html>
